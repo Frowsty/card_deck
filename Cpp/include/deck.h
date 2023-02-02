@@ -55,8 +55,12 @@ public:
     Card take();
     void put(Card card);
     void remove_jokers();
-    void remove_duplicates();
+    vector<int> remove_duplicates();
     Card pick_by_random();
+    void sort_by_suit();
+    void sort_by_value();
+    vector<Card> return_cards() { return this->cards; }
+    void add_card(Card c) { this->cards.push_back(c); }
     
     static void insert(vector<Card> &cardlist, Card card);
 };

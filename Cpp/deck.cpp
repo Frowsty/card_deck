@@ -160,7 +160,7 @@ void Deck::put(Card card) {
 /*
  * Removes the duplicates from deck
  */
-void Deck::remove_duplicates()
+vector<int> Deck::remove_duplicates()
 {
     int x = 0;
     vector<int> found_indexes;
@@ -170,9 +170,9 @@ void Deck::remove_duplicates()
         for (int j = 0; j < cards.size(); j++)
         {
             x++;
-            if (i == j)
+            if (i == j || (cards[i].get_rank() == 0 || cards[j].get_rank() == 0))
                 continue;
-            if (cards[i].get_rank() == cards[j].get_rank() && cards[i].get_suit() == cards[j].get_suit())
+            if (cards[i] == cards[j] && cards[i].get_suit() == cards[j].get_suit())
             {
                 if (found_indexes.size() > 0)
                 {
@@ -188,6 +188,8 @@ void Deck::remove_duplicates()
     reverse(found_indexes.begin(), found_indexes.end());
     for (auto i :found_indexes)
         cards.erase(cards.begin() + i);
+
+    return found_indexes;
 }
 
 /*
@@ -244,4 +246,48 @@ void Deck::insert(vector<Card> &cardlist, Card card) {
     if (!did_add)
         cardlist.push_back(card);
     return;
+}
+
+/*
+ * Sort by suit
+ */
+void Deck::sort_by_suit() {
+    vector<Card> sortedSuits;
+    
+    for (Suit s = Suit::Hearts; s <= Suit::Joker; s = Suit(s + 1))
+    {
+        for (int r = 0; r < 14; r++)
+        {
+            for (auto c : cards)
+            {
+                if (c.get_rank() == r && c.get_suit() == s)
+                {
+                    sortedSuits.push_back(c);
+                }
+            }
+        }
+    } 
+    this->cards = sortedSuits;
+}
+
+/**
+ * Sort by Value
+ */
+void Deck::sort_by_value() {
+    vector<Card> sortedValue;
+
+    for (int r = 0; r < 14; r++)
+    {
+        for (Suit s = Suit::Hearts; s <= Suit::Joker; s = Suit(s+1))
+        {
+            for (auto c : cards)
+            {
+                if (c.get_rank() == r && c.get_suit() == s)
+                {
+                    sortedValue.push_back(c);
+                }
+            }
+        }
+    }
+    this->cards = sortedValue;
 }
