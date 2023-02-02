@@ -8,7 +8,8 @@ enum Suit {
     Hearts,
     Diamonds,
     Spades,
-    Clubs
+    Clubs,
+    Joker
 };
 
 class Card
@@ -34,6 +35,10 @@ public:
         return rank > other.rank;
     }
 
+    int get_rank() { return this->rank; }
+    Suit get_suit() { return this->suit; }
+    
+
     friend ostream & operator << (ostream &out, const Card &c);
 };
 
@@ -49,6 +54,9 @@ public:
     void sort();
     Card take();
     void put(Card card);
-
+    void remove_jokers();
+    void remove_duplicates();
+    Card pick_by_random();
+    
     static void insert(vector<Card> &cardlist, Card card);
 };

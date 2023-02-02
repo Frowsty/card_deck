@@ -11,3 +11,8 @@ TEST(Deck, init)
 {
     SUCCEED();
 }
+
+TEST(Deck, sort)
+{
+    SUCCEED();
+}

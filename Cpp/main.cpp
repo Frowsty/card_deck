@@ -11,4 +11,6 @@ main() {
     cout << "Shuffled deck: " << deck << endl;
     deck.sort();
     cout << "Sorted deck: " << deck << endl;
+    deck.remove_jokers();
+    cout << "Jokers removed: " << deck << endl;
 }

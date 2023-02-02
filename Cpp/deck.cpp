@@ -8,6 +8,23 @@
 
 using namespace std;
 
+/*
+ * Help functions to randomize numbers quickly and more accurately than the built in rand function
+ */
+static unsigned int g_seed;
+
+// Used to seed the generator.           
+inline void fast_srand(int seed) {
+    g_seed = seed;
+}
+
+// Compute a pseudorandom integer.
+// Output value in range [0, 32767]
+inline int fast_rand(void) {
+    g_seed = (214013*g_seed+2531011);
+    return (g_seed>>16)&0x7FFF;
+}
+
 /**
  * Help function to convert Suit enum to string
 */
@@ -21,6 +38,8 @@ const string SuitToString(Suit s) {
             return "S";
         case Suit::Clubs:
             return "C";
+        case Suit::Joker:
+            return "Joker";
     }
     return "";
 }
@@ -55,8 +74,10 @@ ostream & operator << (ostream &out, const Card &c)
             break;
     }
 
-    out << r << SuitToString(c.suit);
-
+    if (SuitToString(c.suit) == "Joker")
+        out << "Joker";
+    else
+        out << r << SuitToString(c.suit);
     return out;
 }
 
@@ -69,6 +90,8 @@ Deck::Deck() {
             cards.push_back(Card(r, s));
         }
     }
+    for (int i = 0; i < 3; i++)
+        cards.push_back(Card(0, Suit::Joker));
 }
 
 /**
@@ -134,11 +157,91 @@ void Deck::put(Card card) {
     cards.push_back(card);
 }
 
+/*
+ * Removes the duplicates from deck
+ */
+void Deck::remove_duplicates()
+{
+    int x = 0;
+    vector<int> found_indexes;
+    for (int i = 0; i < cards.size(); i++)
+    {
+        x = -1;
+        for (int j = 0; j < cards.size(); j++)
+        {
+            x++;
+            if (i == j)
+                continue;
+            if (cards[i].get_rank() == cards[j].get_rank() && cards[i].get_suit() == cards[j].get_suit())
+            {
+                if (found_indexes.size() > 0)
+                {
+                    if (find(found_indexes.begin(), found_indexes.end(), j) != found_indexes.end())
+                        found_indexes.push_back(x);
+                }
+                else
+                    found_indexes.push_back(x);
+            }
+        }
+    }
+
+    reverse(found_indexes.begin(), found_indexes.end());
+    for (auto i :found_indexes)
+        cards.erase(cards.begin() + i);
+}
+
+/*
+ * Picks a random card in the deck
+ */
+Card Deck::pick_by_random()
+{
+    fast_srand(std::chrono::system_clock::now().time_since_epoch().count());
+    int card_index = fast_rand() % cards.size();
+    Card temp = cards[card_index];
+    cards.erase(cards.begin() + card_index);
+    return temp;
+}
+
+/*
+ * Removes the jokers from deck
+ */
+void Deck::remove_jokers()
+{
+    int x = 0;
+    vector<int> found_indexes;
+
+    for (auto c : cards)
+    {
+        if (c.get_suit() == Suit::Joker)
+            found_indexes.push_back(x);
+        x++;
+    }
+
+    reverse(found_indexes.begin(), found_indexes.end());
+    for (auto x : found_indexes)
+        cards.erase(cards.begin() + x);
+}
+
 void Deck::insert(vector<Card> &cardlist, Card card) {
+    bool did_add = false;
+    if (cardlist.size() == 0)
+    {
+        cardlist.push_back(card);
+        did_add = true;
+    }
+    else
+    {    
+        for (int i = 0; i < cardlist.size(); i++)
+        {
+            if (card > cardlist[i])
+                continue;
+            cardlist.insert(cardlist.begin() + i, card);
+            did_add = true;
+            break;
+        }
+    }
 
-    /**
-     * Your code here!
-    */
-
+    if (!did_add)
+        cardlist.push_back(card);
     return;
 }
