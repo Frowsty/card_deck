@@ -38,11 +38,11 @@ TEST(Deck, sort)
 {
     Deck *d = new Deck();
     d->sort();
-    Card c = d->return_cards()[4];
+    Card c = d->get_cards()[4];
     EXPECT_EQ(c.get_rank(), 1);
-    c = d->return_cards()[19];
+    c = d->get_cards()[19];
     EXPECT_EQ(c.get_rank(), 5);
-    c = d->return_cards()[52];
+    c = d->get_cards()[52];
     EXPECT_EQ(c.get_rank(), 13);
 }
 
@@ -81,11 +81,11 @@ TEST(Deck, sort_by_value)
 {
     Deck *d = new Deck();
     d->sort_by_value();
-    Card c1 = d->return_cards()[3];
+    Card c1 = d->get_cards()[3];
     EXPECT_EQ(c1.get_rank() + c1.get_suit(), 1);
-    c1 = d->return_cards()[4];
+    c1 = d->get_cards()[4];
     EXPECT_EQ(c1.get_rank() + c1.get_suit(), 2);
-    c1 = d->return_cards()[19];
+    c1 = d->get_cards()[19];
     EXPECT_EQ(c1.get_rank() + c1.get_suit(), 5);
 }
 
@@ -93,12 +93,12 @@ TEST(Deck, sort_by_suit)
 {
     Deck *d = new Deck();
     d->sort_by_suit();
-    Card c1 = d->return_cards()[3];
+    Card c1 = d->get_cards()[3];
     EXPECT_EQ(c1.get_suit(), Suit::Hearts);
-    c1 = d->return_cards()[15];
+    c1 = d->get_cards()[15];
     EXPECT_EQ(c1.get_rank(), 3);
     EXPECT_EQ(c1.get_suit(), Suit::Diamonds);
-    c1 = d->return_cards()[29];
+    c1 = d->get_cards()[29];
     EXPECT_EQ(c1.get_rank(), 4);
     EXPECT_EQ(c1.get_suit(), Suit::Spades);
 }
@@ -111,7 +111,7 @@ TEST(Deck, remove_jokers)
     Deck *p = new Deck();
     p->sort();
     p->remove_jokers();
-    Card c1 = p->return_cards()[0];
+    Card c1 = p->get_cards()[0];
     EXPECT_TRUE(c1.get_rank() != 0);
 }
 
@@ -121,7 +121,22 @@ TEST(Deck, remove_duplicates)
     vector<int> temp = d->remove_duplicates();
     EXPECT_TRUE(temp.size() == 0);
     Card c1(1, Suit::Diamonds);
-    d->add_card(c1);
+    d->put(c1);
     temp = d->remove_duplicates();
     EXPECT_TRUE(temp.size() > 0);
+}
+
+TEST(Deck, insert)
+{
+    vector<Card> temp;
+    Deck d;
+    Deck *d2 = new Deck();
+    d.insert(temp, d2->take());
+    d.insert(temp, d2->take());
+    d.insert(temp, d2->take());
+    d.insert(temp, d2->take());
+    d.insert(temp, d2->take());
+    d.set_cards(temp);
+    EXPECT_EQ(d.get_cards()[0].get_rank(), 0);
+    EXPECT_EQ(d.get_cards()[3].get_rank(), 12);
 }

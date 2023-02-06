@@ -59,8 +59,8 @@ public:
     Card pick_by_random();
     void sort_by_suit();
     void sort_by_value();
-    vector<Card> return_cards() { return this->cards; }
-    void add_card(Card c) { this->cards.push_back(c); }
+    vector<Card> get_cards() { return this->cards; }
+    void set_cards(vector<Card> c) { this->cards = c; }
     
     static void insert(vector<Card> &cardlist, Card card);
 };
