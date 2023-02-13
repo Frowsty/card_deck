@@ -9,6 +9,7 @@ from deck import Deck, Card
 
 # --Hur testen är uppbyggda--
 # Vi använder oss av assert men inga try / except block så om ett assert felar av någon anledning så dör programmer där och då
+# vilket get oss ett klart tecken på var programmet har gått fel och vad vi kan kolla närmre på. 
 # Testen går ut på att kontrollera att våra funktioner ger oss de resultat vi är ute efter vilket är anledningen till att vi kan 
 # "hård koda" värden i testerna eftersom vi kan förutse vilka kort är var beroende på vilken funktion som kör
 # Test funktionerna är skrivna av mig själv utan hjälp av pytest.
