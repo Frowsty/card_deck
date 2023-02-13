@@ -1,10 +1,22 @@
 from deck import Deck, Card
 
-# Implementera tester ni anser lämpliga här. Motivera gärna varför de behövs (vad de testar och varför).
+# Alla tester är skrivna för att testa specifika delar av koden
+# Det hör huvudsakligen till att kontrollera om kort har korrekt värde eller klädsel
+# men även ifall vi har "hittat" något t.ex duplicates funktionen.
+# Att skriva vad alla tester gör känns rätt otrivialt och onödigt då det mesta är "self explanatory"
+# Min programmerings filosofi de senaste åren har varit att "Kod ska kommentera sig själv" och en massa extra kommentarer gör allt bara klyddigt
+# och oläsligt i mina ögon
 
+# --Hur testen är uppbyggda--
+# Vi använder oss av assert men inga try / except block så om ett assert felar av någon anledning så dör programmer där och då
+# Testen går ut på att kontrollera att våra funktioner ger oss de resultat vi är ute efter vilket är anledningen till att vi kan 
+# "hård koda" värden i testerna eftersom vi kan förutse vilka kort är var beroende på vilken funktion som kör
+# Test funktionerna är skrivna av mig själv utan hjälp av pytest.
+
+
+# 2023-02-13: Alla tester gick igenom utan problem
 
 def test_card():
-    # Test här
     c = Card(4, "Diamonds")
     assert c.rank == 4
     assert c.suite == "Diamonds"
