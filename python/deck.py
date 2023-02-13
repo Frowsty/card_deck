@@ -104,7 +104,7 @@ class Deck:
 
         while len(self.cards) > 0:
             # Go through the deck from left to right, insert the deck in the appropriate spot
-            # Take a card from the old deck, insert it into the new one
+    # Take a card from the old deck, insert it into the new one
             self.insert(sorted_deck, self.take())
 
         # Replace the old (empty) deck with the new (sorted) one
@@ -142,6 +142,8 @@ class Deck:
         for x in range(len(tracker)):
             self.cards.pop(tracker[x])
 
+        return tracker
+
     def sort_by_suit(self):
         sorted_suit = []
 
@@ -172,12 +174,14 @@ class Deck:
         piles = []
         for i in range(players):
             piles.append([])
-        while len(self.cards) > players:
+        while len(self.cards) >= players:
             for j in range(players):
                 piles[j].append(self.take())
 
-        for x in range(len(piles)):
-            print('Player', x+1, ':', str(piles[x]), len(piles[x]))
+        # uncomment below lines to print out each player and the cards dealt to them
+
+        #for x in range(len(piles)):
+        #    print('Player', x+1, ':', str(piles[x]), len(piles[x]))
 
 
 if __name__ == '__main__':
