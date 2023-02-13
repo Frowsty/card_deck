@@ -22,7 +22,10 @@ class Card:
         else:
             str_r = str(r)
 
-        return f'{str_r}{self.suite[0].upper()}'
+        if self.suite == 'Joker':
+            return self.suite
+        else:
+            return f'{str_r}{self.suite[0].upper()}'
 
     def __repr__(self):
         return self.__str__()
@@ -54,6 +57,12 @@ class Deck:
             for rank in range(1, 14):
                 self.cards.append(Card(rank, suite))
 
+        jokes = 0
+
+        while jokes < 3:
+            self.cards.append(Card(0, 'Joker'))
+            jokes = jokes + 1
+
     def __str__(self):
         return str(self.cards)
 
@@ -70,9 +79,21 @@ class Deck:
     def insert(card_list, card):
         """ Inserts a 'card' in the correct spot in the deck 'card_list' """
 
-        ###################
-        # Your code here! #
-        ###################
+        added = False
+        i = 0
+        if len(card_list) == 0:
+            card_list.append(card)
+            added = True
+        else:
+            while i < len(card_list):
+                if (card > card_list[i]):
+                    i = i + 1
+                    continue
+                card_list.insert(i, card)
+                added = True
+                break
+        if added is False:
+            card_list.append(card)
 
         return card_list
 
@@ -83,9 +104,11 @@ class Deck:
 
         while len(self.cards) > 0:
             # Go through the deck from left to right, insert the deck in the appropriate spot
-            self.insert(sorted_deck, self.take())  # Take a card from the old deck, insert it into the new one
+            # Take a card from the old deck, insert it into the new one
+            self.insert(sorted_deck, self.take())
 
-        self.cards = sorted_deck  # Replace the old (empty) deck with the new (sorted) one
+        # Replace the old (empty) deck with the new (sorted) one
+        self.cards = sorted_deck
 
     def take(self):
         """ Take the top card from the deck """
@@ -98,19 +121,81 @@ class Deck:
     def python_sort(self):
         self.cards.sort()
 
+    def remove_jokers(self):
+        joker = Card(0, 'Joker')
+        joker_count = self.cards.count(joker)
+
+        while joker_count != 0:
+            self.cards.remove(joker)
+            joker_count = joker_count - 1
+
+    def remove_duplicates(self):
+        tracker = []
+
+        for x in range(len(self.cards)):
+            for y in range(x+1, len(self.cards)):
+                if self.cards[x] == self.cards[y] and self.cards[x].suite == self.cards[y].suite and self.cards[x].suite != 'Joker':
+                    tracker.append(y)
+                    break
+
+        tracker.reverse()
+        for x in range(len(tracker)):
+            self.cards.pop(tracker[x])
+
+    def sort_by_suit(self):
+        sorted_suit = []
+
+        for suite in ['Hearts', 'Diamonds', 'Spades', 'Clubs', 'Joker']:
+            for rank in range(0, 14):
+                for x in range(len(self.cards)):
+                    if self.cards[x].rank == rank and self.cards[x].suite == suite:
+                        sorted_suit.append(self.cards[x])
+
+        self.cards = sorted_suit
+
+    def sort_by_value(self):
+        sorted_value = []
+
+        for rank in range(0, 14):
+            for suite in ['Joker', 'Hearts', 'Diamonds', 'Spades', 'Clubs']:
+                for x in range(len(self.cards)):
+                    if self.cards[x].rank == rank and self.cards[x].suite == suite:
+                        sorted_value.append(self.cards[x])
+
+        self.cards = sorted_value
+
+    def pick_by_random(self):
+        random_pick = random.randint(0, len(self.cards))
+        return self.cards.pop(random_pick)
+
+    def deal(self, players):
+        piles = []
+        for i in range(players):
+            piles.append([])
+        while len(self.cards) > players:
+            for j in range(players):
+                piles[j].append(self.take())
+
+        for x in range(len(piles)):
+            print('Player', x+1, ':', str(piles[x]), len(piles[x]))
+
 
 if __name__ == '__main__':
     deck = Deck()
     print('Fresh deck:', deck)
     deck.shuffle()
     print('Shuffled deck:', deck)
-    deck.sort()
+    deck.sort_by_suit()
     print('Sorted deck:', deck)
-
-
+    deck.put(Card(5, 'Hearts'))
+    deck.put(Card(5, 'Hearts'))
+    deck.put(Card(5, 'Hearts'))
+    deck.put(Card(7, 'Hearts'))
+    deck.sort_by_value()
+    print('Sorted deck:', deck)
+    deck.remove_duplicates()
     deck.shuffle()
     print('Shuffled deck:', deck)
     deck.python_sort()
     print('Python Sorted deck:', deck)
-
-    
+    deck.deal(5)

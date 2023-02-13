@@ -61,6 +61,7 @@ public:
     void sort_by_value();
     vector<Card> get_cards() { return this->cards; }
     void set_cards(vector<Card> c) { this->cards = c; }
+    void deal(int n);
     
     static void insert(vector<Card> &cardlist, Card card);
 };

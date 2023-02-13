@@ -291,3 +291,33 @@ void Deck::sort_by_value() {
     }
     this->cards = sortedValue;
 }
+
+/*
+ * Deal cards to n amount of players
+ */
+void Deck::deal(int n)
+{
+    vector<vector<Card>> hands(n);
+
+    while (cards.size() >= n)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            hands[i].push_back(this->take());
+        }
+    }
+
+    int count = 1;
+    for (vector<Card> vect1D : hands)
+    {
+        string separator;
+        cout << "Player " << count << ": ";
+        for (auto i : vect1D)
+        {
+            cout << separator << i;
+            separator = ", ";
+        }
+        cout << endl;
+        count++;
+    }
+}
