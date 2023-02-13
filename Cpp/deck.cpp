@@ -297,6 +297,7 @@ void Deck::sort_by_value() {
  */
 void Deck::deal(int n)
 {
+    
     vector<vector<Card>> hands(n);
 
     while (cards.size() >= n)
@@ -307,6 +308,9 @@ void Deck::deal(int n)
         }
     }
 
+    // uncommend this part of the code to see the hands of each players
+
+    /*
     int count = 1;
     for (vector<Card> vect1D : hands)
     {
@@ -320,4 +324,5 @@ void Deck::deal(int n)
         cout << endl;
         count++;
     }
+    */
 }

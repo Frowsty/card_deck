@@ -145,10 +145,8 @@ TEST(Deck, deal)
 {
     Deck *d = new Deck();
     Deck *d2 = new Deck();
-    std::cout << "Test 1: " << std::endl;
     d->deal(4);
     EXPECT_EQ(d->size(), 3);
-    std::cout << "Test 2: " << std::endl;
     d2->deal(5);
     EXPECT_EQ(d2->size(), 0);
 }
